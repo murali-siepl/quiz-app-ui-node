@@ -61,7 +61,7 @@ const AttemptQuiz = ({ match }) => {
   const submitQuiz = async () => {
     // send attemped Questions to backend
     try {
-      const res = await fetch("/API/quizzes/submit", {
+      const res = await fetch("localhost:8000/API/quizzes/submit", {
         method: "POST",
         body: JSON.stringify({
           uid,

@@ -10,6 +10,7 @@ const UserDashboard = ({ user }) => {
   const [attemptedQuizzes, setAttemptedQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editQuiz, setEditQuiz] = useState([]);
+ 
   // Fetch Data from the API
   useEffect(() => {
     if (!user.uid) {
@@ -37,8 +38,10 @@ const UserDashboard = ({ user }) => {
         questions,
         isOpen,
       });
-      const results = await fetch("/API/quizzes/edit", {
-        method: "POST",
+
+      const requestOptions = {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           quizId: createdQuizzes[editQuiz]._id,
           uid: user.uid,
@@ -46,25 +49,68 @@ const UserDashboard = ({ user }) => {
           questions,
           isOpen,
         }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const submitData = await results.json();
-      console.dir(submitData);
-      const temp = [...createdQuizzes];
-      temp[editQuiz[0]].title = title;
-      temp[editQuiz[0]].questions = questions;
-      temp[editQuiz[0]].isOpen = isOpen;
-      setCreatedQuizzes(temp);
-      setEditQuiz([]);
-      setLoading(false);
+      };
+      fetch('/API/quizzes/edit', requestOptions)
+        .then(async response => {
+          const isJson = response.headers.get('content-type')?.includes('application/json');
+          const submitData = isJson && await response.json();
+
+          // check for error response
+          if (!response.ok) {
+            // get error message from body or default to response status
+            const error = (submitData && submitData.message) || response.status;
+            return Promise.reject(error);
+          }
+          else {
+           // const submitData = await results.json();
+            console.dir(submitData);
+            const temp = [...createdQuizzes];
+            temp[editQuiz[0]].title = title;
+            temp[editQuiz[0]].questions = questions;
+            temp[editQuiz[0]].isOpen = isOpen;
+            setCreatedQuizzes(temp);
+            setEditQuiz([]);
+            setLoading(false);
+
+          }
+        })
+        .catch(error => {
+       //   this.setState({ errorMessage: error });
+          console.error('There was an error!', error);
+        });
+
+
+      // const results = await fetch("http://localhost:4000/API/quizzes/edit", {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     quizId: createdQuizzes[editQuiz]._id,
+      //     uid: user.uid,
+      //     title,
+      //     questions,
+      //     isOpen,
+      //   }),
+
+      // });
+      // if (results && results.statusText === "OK" && results.status === 200) {
+      //   const submitData = await results.json();
+      //   console.dir(submitData);
+      //   const temp = [...createdQuizzes];
+      //   temp[editQuiz[0]].title = title;
+      //   temp[editQuiz[0]].questions = questions;
+      //   temp[editQuiz[0]].isOpen = isOpen;
+      //   setCreatedQuizzes(temp);
+      //   setEditQuiz([]);
+      //   setLoading(false);
+      // }
+      // else {
+      //   console.error()
+      // }
     }
   };
 
   if (loading) return <LoadingScreen />;
 
-  if (editQuiz.length)
+  if (editQuiz.length) {
     return (
       <CreateQuiz
         user={user}
@@ -74,6 +120,7 @@ const UserDashboard = ({ user }) => {
         editQuizHandle={editQuizHandle}
       />
     );
+  }
   return (
     <div className="dash-body">
       <div className="quizzes">
