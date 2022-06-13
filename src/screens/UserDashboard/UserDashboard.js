@@ -18,7 +18,7 @@ const UserDashboard = ({ user }) => {
       return;
     }
     const fetchQuizData = async () => {
-      const results = await fetch(`/API/users/${user.uid}`);
+      const results = await fetch(`http://localhost:5000/api/users/${user.uid}`);
       const quizData = await results.json();
       if (quizData.createdQuiz) setCreatedQuizzes(quizData.createdQuiz);
       if (quizData.attemptedQuiz) setAttemptedQuizzes(quizData.attemptedQuiz);
@@ -50,7 +50,7 @@ const UserDashboard = ({ user }) => {
           isOpen,
         }),
       };
-      fetch('/API/quizzes/edit', requestOptions)
+      fetch('http://localhost:5000/API/quizzes/edit', requestOptions)
         .then(async response => {
           const isJson = response.headers.get('content-type')?.includes('application/json');
           const submitData = isJson && await response.json();
