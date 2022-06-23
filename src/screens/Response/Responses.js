@@ -11,7 +11,7 @@ const Responses = ({ match }) => {
 
   useEffect(() => {
     const getResponses = async () => {
-      const res = await fetch("/API/quizzes/responses", {
+      const res = await fetch("http://23.102.128.226:5000/API/quizzes/responses", {
         method: "POST",
         body: JSON.stringify({ quizCode: quizId, uid }),
         headers: {

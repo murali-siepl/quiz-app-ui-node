@@ -47,7 +47,7 @@ const CreateQuiz = ({
     console.log("Quiz Creation Starts...");
     setLoading("start");
     try {
-      const result = await fetch("http://localhost:4000/API/quizzes/create", {
+      const result = await fetch("http://23.102.128.226:5000/API/quizzes/create", {
         method: "POST",
         body: JSON.stringify({
           title,
@@ -55,8 +55,11 @@ const CreateQuiz = ({
           questions: questionArray,
           isOpen: access,
         }),
+        mode: 'cors',
         headers: {
           "Content-Type": "application/json",
+          'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
         },
       });
       console.log("Quiz posted ! ");
