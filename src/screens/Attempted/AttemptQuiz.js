@@ -15,7 +15,7 @@ const AttemptQuiz = ({ match }) => {
   const uid = firebase.auth().currentUser.uid;
   useEffect(() => {
     const fetchQuiz = async () => {
-      const res = await fetch("http://localhost:5000/api/join", {
+      const res = await fetch("http://23.102.128.226:5000/api/join", {
         method: "POST",
         body: JSON.stringify({ quizId: quizCode, uid }),
         headers: {
@@ -61,7 +61,7 @@ const AttemptQuiz = ({ match }) => {
   const submitQuiz = async () => {
     // send attemped Questions to backend
     try {
-      const res = await fetch("localhost:8000/API/submit", {
+      const res = await fetch("23.102.128.226:5000/API/submit", {
         method: "POST",
         body: JSON.stringify({
           uid,

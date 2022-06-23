@@ -27,7 +27,7 @@ const App = () => {
           firebase.auth().currentUser.metadata.creationTime
         ) {
           try {
-            await fetch("http://localhost:5000/api/users/create", {
+            await fetch("http://23.102.128.226:5000/api/users/create", {
               method: "POST",
               body: JSON.stringify({
                 uid: user.uid,
