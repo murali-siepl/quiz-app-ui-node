@@ -25,8 +25,14 @@ app.use(function(req, res, next) {
 
 app.use("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
 });
 // Listening to APIs
-app.listen(process.env.PORT || 8000, () =>
-  console.log("Listening on Port 8000")
+app.listen(process.env.PORT || 3080, () =>
+  console.log("Listening on Port 3080")
 );

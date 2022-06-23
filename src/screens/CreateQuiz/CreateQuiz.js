@@ -55,8 +55,11 @@ const CreateQuiz = ({
           questions: questionArray,
           isOpen: access,
         }),
+        mode: 'cors',
         headers: {
           "Content-Type": "application/json",
+          'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
         },
       });
       console.log("Quiz posted ! ");

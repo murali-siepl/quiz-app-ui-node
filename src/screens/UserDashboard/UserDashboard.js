@@ -18,7 +18,7 @@ const UserDashboard = ({ user }) => {
       return;
     }
     const fetchQuizData = async () => {
-      const results = await fetch(`http://23.102.128.226:5000/api/users/${user.uid}`);
+      const results = await fetch(`http://23.102.128.226:5000/API/users/${user.uid}`);
       const quizData = await results.json();
       if (quizData.createdQuiz) setCreatedQuizzes(quizData.createdQuiz);
       if (quizData.attemptedQuiz) setAttemptedQuizzes(quizData.attemptedQuiz);
@@ -50,7 +50,7 @@ const UserDashboard = ({ user }) => {
           isOpen,
         }),
       };
-      fetch('http://23.102.128.226:5000/API/quizzes/edit', requestOptions)
+      fetch('http://23.102.128.226:5000/API/edit', requestOptions)
         .then(async response => {
           const isJson = response.headers.get('content-type')?.includes('application/json');
           const submitData = isJson && await response.json();
@@ -80,31 +80,31 @@ const UserDashboard = ({ user }) => {
         });
 
 
-      // const results = await fetch("http://23.102.128.226:4000/API/quizzes/edit", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     quizId: createdQuizzes[editQuiz]._id,
-      //     uid: user.uid,
-      //     title,
-      //     questions,
-      //     isOpen,
-      //   }),
+      const results = await fetch("http://23.102.128.226:5000/API/quizzes/edit", {
+        method: "POST",
+        body: JSON.stringify({
+          quizId: createdQuizzes[editQuiz]._id,
+          uid: user.uid,
+          title,
+          questions,
+          isOpen,
+        }),
 
-      // });
-      // if (results && results.statusText === "OK" && results.status === 200) {
-      //   const submitData = await results.json();
-      //   console.dir(submitData);
-      //   const temp = [...createdQuizzes];
-      //   temp[editQuiz[0]].title = title;
-      //   temp[editQuiz[0]].questions = questions;
-      //   temp[editQuiz[0]].isOpen = isOpen;
-      //   setCreatedQuizzes(temp);
-      //   setEditQuiz([]);
-      //   setLoading(false);
-      // }
-      // else {
-      //   console.error()
-      // }
+      });
+      if (results && results.statusText === "OK" && results.status === 200) {
+        const submitData = await results.json();
+        console.dir(submitData);
+        const temp = [...createdQuizzes];
+        temp[editQuiz[0]].title = title;
+        temp[editQuiz[0]].questions = questions;
+        temp[editQuiz[0]].isOpen = isOpen;
+        setCreatedQuizzes(temp);
+        setEditQuiz([]);
+        setLoading(false);
+      }
+      else {
+        console.error()
+      }
     }
   };
 
