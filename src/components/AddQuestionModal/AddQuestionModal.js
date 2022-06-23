@@ -33,6 +33,7 @@ export default function AddQuestionModal({
   opType = "radio",
   opArray,
   index = -1,
+ // TrueOrFalse = 0,
   addQuestionHandle,
 }) {
   const classes = useStyles();
@@ -42,6 +43,7 @@ export default function AddQuestionModal({
   const [editedOption, setEditedOption] = useState(null);
   const [editOpIndex, setEditOpIndex] = useState(-1);
   const [titleField, setTitleField] = useState("");
+  const [trueOrFalse,settrueOrFalse] = useState(0);
   const optionsRef = useRef(null);
   const checkBoxRef = useRef(null);
 
@@ -65,6 +67,16 @@ export default function AddQuestionModal({
   };
   const addQuestionCallBack = () => {
     const tempArr = [...optionsArray];
+    
+    if(trueOrFalse === 1){
+        if( tempArr && tempArr.length > 2){
+          alert("More Than two Answers for True Or False")
+          return;
+        }
+      }
+
+    // }
+    //console.log(tempArr)
     if (optionsRef.current.value.length !== 0) {
       // For radio options, set all other options incorrect
       if (optionType === "radio" && checkBoxRef.current.checked)
@@ -76,14 +88,14 @@ export default function AddQuestionModal({
       });
     }
     // Error Handling
-    if (!titleField.length && optionsArray.length < 2) {
-      alert("Please add Question and atleast 2 options.");
+    if (!titleField.length && optionsArray.length < 3) {
+      alert("Please add Question and atleast 3 options.");
       return;
     } else if (!titleField.length) {
       alert("Please add Question.");
       return;
-    } else if (optionsArray.length < 2) {
-      alert("Number of Options must be greater than 1.");
+    } else if (optionsArray.length < 3) {
+      alert("Number of Options must be greater than 3.");
       return;
     }
     const correctOp = optionsArray.filter((op) => op.isCorrect);
@@ -98,6 +110,7 @@ export default function AddQuestionModal({
   };
 
   const addOption = () => {
+    console.log(optionsRef)
     if (optionsRef.current.value.length === 0) return;
 
     const arr = [...optionsArray];
@@ -118,9 +131,17 @@ export default function AddQuestionModal({
     });
     optionsRef.current.value = "";
     checkBoxRef.current.checked = false;
+    
     setOptionsArray(arr);
   };
-  const handleTypeChange = (e) => setOptionType(e.target.value);
+  const handleTypeChange = (e) => {
+    console.log(e.target.selectedIndex)
+    if(e.target.selectedIndex === 2){
+       settrueOrFalse(1);
+      alert(trueOrFalse)
+    }
+    setOptionType(e.target.value);
+  }
 
   const deleteHandler = (ind) => {
     const temp = [...optionsArray];
@@ -182,6 +203,9 @@ export default function AddQuestionModal({
               </option>
               <option className="selectOp" value="check">
                 Multiple Answers
+              </option>
+              <option className="selectOp" value="radio">
+                True Or False
               </option>
             </select>
 
